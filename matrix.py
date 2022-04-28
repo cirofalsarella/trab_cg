@@ -7,3 +7,6 @@ def getMatrix(size, theta, t_x, t_y):
                       0.0,                       0.0,                            1.0,    0.0, 
                       0.0,                       0.0,                            0.0,    1.0],
                     np.float32)
+
+    ## Juntamos todas as 3 matrizes de transformação em uma só
+    ## Ela realiza as 3 operações (rotação, translação e escala)

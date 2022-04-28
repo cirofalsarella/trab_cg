@@ -7,14 +7,18 @@ import matrix
 
 class Star:
     def __init__(self, offset, x_0, y_0, scale):
+        # Salva os dados iniciais
         self.offset = offset
         self.x_0 = x_0
         self.y_0 = y_0
         self.scale = scale
+
+        # Salva os vertices do obj em um array
         self.vertices = self.setVertices()
 
 
     def setVertices(self):
+        ## Dois triângulos
         vertices = np.zeros(6, [("position", np.float32, 2)])
         vertices['position'] = [
                                     ( 0.2, 0.15), # vertice 0
@@ -27,6 +31,7 @@ class Star:
         return vertices
  
     def drawShape(self, loc_color, program, dgree):
+        # Transformação ocorre apenas em rotação
         mat_transformation = matrix.getMatrix(self.scale, dgree, self.x_0, self.y_0)
         loc = glGetUniformLocation(program, "mat_transformation")
         glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)

@@ -7,14 +7,18 @@ import matrix
 
 class Coin:
     def __init__(self, offset, x_0, y_0, scale):
+        # Salva os dados iniciais
         self.offset = offset
         self.x_0 = x_0
         self.y_0 = y_0
         self.scale = scale
+
+        # Salva os vertices do obj em um array
         self.vertices = self.setVertices()
         
 
     def setVertices(self):
+        # 2 círculos (interno e externo)
         vertices = np.zeros(64, [("position", np.float32, 2)])
 
         angle = 0.0
@@ -34,6 +38,7 @@ class Coin:
 
 
     def drawShape(self, loc_color, program):
+        # Não ocorre transformação -> apenas translada para posição 'origem'
         mat_transformation = matrix.getMatrix(1, 0, self.x_0, self.y_0)
         loc = glGetUniformLocation(program, "mat_transformation")
         glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)

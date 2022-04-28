@@ -8,12 +8,16 @@ import math
 
 class Planet():
     def __init__(self, offset, x_0, y_0):
+        # Salva os dados iniciais
         self.offset = offset
         self.x_0 = x_0
         self.y_0 = y_0
+        
+        # Salva os vertices do obj em um array
         self.vertices = self.setVertices()
     
     def setVertices(self):
+        # Bandeira (linha + triângulo) + Círculo
         step = 16
         radius = 0.15
 
@@ -37,6 +41,7 @@ class Planet():
 
 
     def drawShape(self, loc_color, program, dg):
+        # Rotaciona
         mat_transformation = matrix.getMatrix(1, dg, self.x_0, self.y_0)
         loc = glGetUniformLocation(program, "mat_transformation")
         glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
