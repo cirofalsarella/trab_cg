@@ -1,22 +1,30 @@
+## Grafic Imports
 import glfw
 from OpenGL.GL import *
-import OpenGL.GL.shaders
+
+## Math Imports
 import numpy as np
 import math
 
+# Objects
 import ship, star, coin, planet, ufo
 
 
-# Janela
 def initWindow():
+    ## Init window
     glfw.init()
+
+    ## Set variables
     glfw.window_hint(glfw.VISIBLE, glfw.FALSE)
     window = glfw.create_window(700, 700, "Trabalho 1 CG", None, None)
+    
+    ## Set window
     glfw.make_context_current(window)
 
     return window
 
 def vertexShader():
+    ## Create vertex
     vertex_code = """
         attribute vec2 position;
         uniform mat4 mat_transformation;
@@ -28,6 +36,7 @@ def vertexShader():
     vertex = glCreateShader(GL_VERTEX_SHADER)
     glShaderSource(vertex, vertex_code)
     
+    ## Set vertex
     glCompileShader(vertex)
     if not glGetShaderiv(vertex, GL_COMPILE_STATUS):
         error = glGetShaderInfoLog(vertex).decode()
@@ -37,6 +46,7 @@ def vertexShader():
     return vertex
 
 def fragmentShader():
+    ## Create fragment
     fragment_code = """
             uniform vec4 color;
             void main(){
@@ -47,6 +57,7 @@ def fragmentShader():
     fragment = glCreateShader(GL_FRAGMENT_SHADER)
     glShaderSource(fragment, fragment_code)
 
+    ## Set fragment
     glCompileShader(fragment)
     if not glGetShaderiv(fragment, GL_COMPILE_STATUS):
         error = glGetShaderInfoLog(fragment).decode()
@@ -56,14 +67,19 @@ def fragmentShader():
     return fragment
 
 def programCreate():
+    # Create program
     program  = glCreateProgram()
     
+
+    ## Set shaders
     vertex = vertexShader()
     glAttachShader(program, vertex)
     
     fragment = fragmentShader()
     glAttachShader(program, fragment)
 
+
+    ## Set program
     glLinkProgram(program)
     if not glGetProgramiv(program, GL_LINK_STATUS):
         print(glGetProgramInfoLog(program))
@@ -74,6 +90,7 @@ def programCreate():
     return program
 
 def setVertices(myCoin, uStar, rStar, ldStar, myPlanet, myShip, myUFO, offset_tot):
+    ## Creating and setting vertices
     vertices = np.zeros(offset_tot, [("position", np.float32, 2)])
 
     for i in range(myCoin.vertices.size):
@@ -97,6 +114,8 @@ def setVertices(myCoin, uStar, rStar, ldStar, myPlanet, myShip, myUFO, offset_to
     for i in range(myUFO.vertices.size):
         vertices[i + myUFO.offset] = myUFO.vertices[i]
 
+
+    ## Setting buffer
     buffer = glGenBuffers(1)
     glBindBuffer(GL_ARRAY_BUFFER, buffer)
     glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_DYNAMIC_DRAW)
@@ -129,6 +148,10 @@ def key_event(window,key,scancode,action,mods):
     if key ==  90: s_ufo -= 0.05     # Z
 
 
+#####################
+###  SET OBJECTS  ###
+#####################
+
 myCoin = coin.Coin(0, 0.7, -0.7, 1)
 offset_at = myCoin.vertices.size
 
@@ -150,6 +173,10 @@ offset_at += myShip.vertices.size
 myUFO = ufo.UFO(offset_at, 0, -0.7)
 offset_at += myUFO.vertices.size
 
+
+################
+###   MAIN   ###
+################
 
 window = initWindow()
 program = programCreate()
@@ -175,11 +202,7 @@ bValue= 245.0 / 255.0
 glfw.set_key_callback(window,key_event)
 
 s_ufo = 1
-dg_planet = 0
-tx_ship = 0
-ty_ship = 0
-dg_ship = 0
-dg_star = 0
+dg_planet = tx_ship = ty_ship = dg_ship = dg_star = 0
 while not glfw.window_should_close(window):
 
     # funcao interna do glfw para gerenciar eventos de mouse, teclado, etc
